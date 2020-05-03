@@ -1,23 +1,46 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Login from '../components/Login.vue'
+import Register from '@/components/Register'
+import Welcome from '@/components/Welcome'
+import Center from '@/components/Center'
+import Album from '@/components/Album'
+import Recycler from '@/components/Recycler'
+import Home from '@/components/Home'
 
 Vue.use(VueRouter)
 
   const routes = [
+    // 配置路由路径
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/user/login',
+    component: Login
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
+    path: '/user/register',
+    component: Register
+  },
+  {
+    path: '/user/welcome',
+    redirect: '/user/home',
+    component: Welcome,
+    children:[
+      {path: '/user/home',
+        component: Home },
+      {path: '/user/center',
+        component: Center },
+    {path: '/user/album',
+      component: Album },
+    {path: '/user/recycler',
+      component: Recycler },
+    ]
+  },
+  // 重定位
+  {
+    path: '/',
+    redirect: '/user/login'
+  },
+
 ]
 
 const router = new VueRouter({
