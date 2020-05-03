@@ -7,6 +7,8 @@ import Center from '@/components/Center'
 import Album from '@/components/Album'
 import Recycler from '@/components/Recycler'
 import Home from '@/components/Home'
+import axios from 'axios'
+Vue.prototype.$http = axios;
 
 Vue.use(VueRouter)
 
