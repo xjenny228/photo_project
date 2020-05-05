@@ -6,13 +6,13 @@
     </el-breadcrumb>
     <el-form :model="editform" :rules=" editformrules" ref="editformref" label-width="100px">
       <el-form-item label="昵称" prop="nickname">
-        <el-input v-model="editform.nickname"></el-input>
+        <el-input class="input" v-model="editform.nickname"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="editform.email"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="edit ">确定</el-button>
+        <el-button type="primary" @click="edit ">修改</el-button>
         <el-button @click="reseteditform">重置</el-button>
       </el-form-item>
     </el-form>
@@ -77,4 +77,16 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.el-form{
+    width: 50%;
+     border:0px;
+}
+.input{
+     border:0px ;
+    outline: none;
+}
+.el-input_inner{
+     border:0px ;
+     border-radius: 0px;
+}
 </style>

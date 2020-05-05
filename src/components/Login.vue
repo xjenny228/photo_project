@@ -37,8 +37,8 @@ export default {
   data() {
     return {
       form: {
-        username: "",
-        password: ""
+        username: "b",
+        password: "s1"
       },
       //   输入验证规则
       rules: {
@@ -60,10 +60,15 @@ export default {
     },
     //编程式导航页面跳转
     register() {
+    
       this.$router.push("/user/register");
     },
-    load() {
-      this.$router.push("/user/home");
+    async load() {
+       const {data:res}=await this.$http.get('/api/user/login'+'?username=a3&password=a&rememberMe=1',this.form)
+      console.log(res)
+    if(res.code!==0) return this.$message.console.error("登录失败");
+    
+     this.$router.push("/user/home");
     }
   }
 };

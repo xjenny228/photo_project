@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import { Button, Form, FormItem, Input, Link, Container, Main, Header, Aside, Menu, MenuItem, Card,
 Col, Row ,Breadcrumb,BreadcrumbItem,
-
+Upload,
+CollapseItem,
+Collapse,
+Message
 } from 'element-ui'
 
 Vue.use(Button)
@@ -20,3 +23,7 @@ Vue.use(Col)
 Vue.use(Row)
 Vue.use(Breadcrumb)
 Vue.use(BreadcrumbItem)
+Vue.use(Upload)
+Vue.use(Collapse)
+Vue.use(CollapseItem)
+Vue.prototype.$message = Message
