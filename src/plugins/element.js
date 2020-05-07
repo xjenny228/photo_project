@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { Button, Form, FormItem, Input, Link, Container, Main, Header, Aside, Menu, MenuItem, Card,
-Col, Row ,Breadcrumb,BreadcrumbItem,
+Col, Row, Breadcrumb, BreadcrumbItem, Checkbox,CheckboxGroup
 
 } from 'element-ui'
 
@@ -20,3 +20,5 @@ Vue.use(Col)
 Vue.use(Row)
 Vue.use(Breadcrumb)
 Vue.use(BreadcrumbItem)
+Vue.use(Checkbox)
+Vue.use(CheckboxGroup)

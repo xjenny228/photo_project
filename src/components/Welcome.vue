@@ -3,11 +3,17 @@
     <el-container>
       <!-- 头部 -->
       <el-header>
-          <span class="title">个人相册管理系统</span>
+          <span class="title">
+            <i class="el-icon-picture-outline"></i>
+            个人相册
+            </span>
           <!-- 个人信息 -->
-          <span class="information">用户</span>
+          <span class="information">
+            <img src="../assets/logo.png" alt="">
+            <span class="nickname">昵称</span>
+          </span>
           <!-- 退出按钮 -->
-          <el-button type="info" @click="exit">退出</el-button>
+          <el-button type="primary" @click="exit">退出</el-button>
       </el-header>
       <el-container>
         <!-- 左侧边栏 -->
@@ -17,10 +23,7 @@
           <div class="collapse" @click="changeCol">| | |</div>
           <!-- 侧边栏导航菜单 -->
           <el-menu
-            background-color="rgb(30, 40, 44)"
-            text-color="#fff"
-            active-text-color="rgb(42, 83, 205)"
-            unique-opened
+            active-text-color="rgb(64, 158, 255)"
             :collapse="iscollapse"
             :collapse-transition="false"
             :default-active="$route.path"
@@ -45,8 +48,9 @@
           </el-menu>
         </el-aside>
         <!-- 主体部分 -->
-        <el-main>
+        <el-main >
             <router-view> </router-view>
+            
         </el-main>
       </el-container>
     </el-container>
@@ -71,41 +75,51 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.container,
-.el-container {
+
+.container,.el-container {
   height: 100%;
 }
 .el-header {
     position: relative;
-  background-color: rgb(14, 20, 25);
+  background-color: rgb(35, 103, 164);
 }
 .el-aside {
-  background-color: rgb(30, 40, 44);
-}
-.el_main{
-  background-color: rgb(233, 237, 241);
+  background-color: rgb(255, 255, 255);
 }
 .collapse {
-  background-color: rgb(193, 193, 193);
+  background-color: rgb(220, 232, 244);
   text-align: center;
   cursor: pointer;
+}
+.el-menu{
+  border-right: 0;
+}
+.el-main{
+  margin-right: 10px;
 }
 .title{
     color: #fff;
     line-height: 60px;
     font-size: 25px;
-    font-family:'Times New Roman', Times, serif;
+    font-family:'Courier New', Courier, monospace;
     font-weight: 200;
 }
-.information{
+ img{
     position: absolute;
     top:50%;
     left: 50%;
-        transform: translate(-50%,-50%);
-      display: inline-block;
-      width: 100px;
+    transform: translate(-50%,-50%);
+      width: 30px;
       height: 30px;
       background-color: #fff;
+      border-radius: 50%;
+    }
+    .nickname{
+      position: absolute;
+      top:50%;
+      left:50%;
+      transform: translate(80%,-50%);
+      color: #fff;
     }
     .el-button{
         position: absolute;
