@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <el-row  type="flex" justify="end">
         <el-col :span="8">
-          <el-input placeholder="通过此处搜索相片" >
+          <el-input placeholder="通过此处搜索相片" @input="inputchange" >
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>

@@ -16,7 +16,7 @@
           <el-input v-model="form.email"></el-input>
         </el-form-item>
       </el-form>
-      <el-button type="info">立即注册</el-button>
+      <el-button type="info" @click="submit">立即注册</el-button>
     </div>
   </div>
 </template>
@@ -53,6 +53,16 @@ export default {
         ]
       }
     };
+  },
+  methods:{
+    async submit(){
+     const {data:res}=await this.$http.get('/api/user/register',{params:this.form})
+     console.log(res)
+     if(res.code!==0)return this.$message.error("注册失败");
+     this.$message.success("注册成功");
+     this.$router.push('/user/login')
+     
+    }
   }
 };
 </script>

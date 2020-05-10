@@ -37,8 +37,9 @@ export default {
   data() {
     return {
       form: {
-        username: "b",
-        password: "s1"
+        username: "a3",
+        password: "a",
+        remeberMe:1
       },
       //   输入验证规则
       rules: {
@@ -64,11 +65,22 @@ export default {
       this.$router.push("/user/register");
     },
     async load() {
-       const {data:res}=await this.$http.get('/api/user/login'+'?username=a3&password=a&rememberMe=1',this.form)
+     //   var xhr = new XMLHttpRequest();
+//xhr.open('GET','http://www.luckycurve.cn:8090/api/user/login');
+// xhr.withCredentials = true;
+// xhr.send();
+       const {data:res}=await this.$http.get('/api/user/login'+'?username=a3&password=a&rememberMe=1')
       console.log(res)
-    if(res.code!==0) return this.$message.console.error("登录失败");
     
+    if(res.code!==0) return this.$message.console.error("登录失败");
+    this.$message.success("登录成功")
+ //   window.sessionStorage.getItem('cookie',this.form)
      this.$router.push("/user/home");
+      
+
+
+
+     
     }
   }
 };

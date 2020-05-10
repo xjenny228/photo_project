@@ -55,8 +55,9 @@ export default {
   },
   methods: {
     async geteditform() {
-      //   const data = await this.$http.get('/api/user/info/set')
-      // console.log(data);
+        const {data:res} = await this.$http.get('/api/user/info/set')
+       console.log(res);
+       this.editform=res.data
     },
     //点击重置按钮
     reseteditform() {
@@ -67,10 +68,11 @@ export default {
         this.$refs.editformref.validate(async valid=>{
             if(!valid)return
             
-            //const res=await this.$http.get('/api/user/info/set',this.editform)
-            //console.log(res)
-            //if(res.meta!==200)return console.log('更新成功')
-            //console.log('更新失败')
+            const{ data:res}=await this.$http.get('/api/user/info/set',this.editform)
+            console.log(res)
+            if(res.code!==0)return console.log('更新失败')
+            console.log('更新成功')
+            this.editform=res.data
         })
     }
   }

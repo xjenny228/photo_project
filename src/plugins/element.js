@@ -4,7 +4,8 @@ Col, Row ,Breadcrumb,BreadcrumbItem,
 Upload,
 CollapseItem,
 Collapse,
-Message
+Message,
+
 } from 'element-ui'
 
 Vue.use(Button)
@@ -26,4 +27,5 @@ Vue.use(BreadcrumbItem)
 Vue.use(Upload)
 Vue.use(Collapse)
 Vue.use(CollapseItem)
+
 Vue.prototype.$message = Message

@@ -5,14 +5,16 @@ import './plugins/element.js'
 import './assets/css/global.css'
 import axios from 'axios'
 
-axios.defaults.baseURL = `http://www.luckycurve.cn:8090` 
-axios.interceptors.request.use(config => {
-  console.log(config)
-  console.log("登录")
+axios.defaults.withCredentials = true
 
-  config.headers.Authorization = window.sessionStorage.getItem('token');
-  return config
-})       
+axios.defaults.baseURL = `http://www.luckycurve.cn:8090` 
+// axios.interceptors.request.use(config => {
+//   console.log(config)
+//   //console.log("登录")
+
+//   config.headers.Authorization = window.sessionStorage.getItem('cookie');
+//   return config
+// })       
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
