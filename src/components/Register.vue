@@ -1,6 +1,7 @@
 <template>
   <div class="main_container">
     <div class="reg_box">
+      <i class="el-icon-close" @click="close"></i>
       <h2>欢迎注册</h2>
       <el-form label-width="80px" :model="form" :rules="rules">
         <el-form-item label="用户名：" prop="username">
@@ -98,8 +99,12 @@ export default {
   bottom: 30px;
   box-sizing: border-box;
 }
+i{
+  margin-top: 10px;
+  margin-left: 370px;
+}
 h2 {
   padding-left: 30px;
-  line-height: 80px;
+  line-height: 40px;
 }
 </style>

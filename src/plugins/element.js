@@ -5,6 +5,7 @@ Upload,
 CollapseItem,
 Collapse,
 Message,
+Checkbox,CheckboxGroup
 
 } from 'element-ui'
 
@@ -29,3 +30,5 @@ Vue.use(Collapse)
 Vue.use(CollapseItem)
 
 Vue.prototype.$message = Message
+Vue.use(Checkbox)
+Vue.use(CheckboxGroup)
