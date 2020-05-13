@@ -16,6 +16,12 @@ axios.defaults.baseURL = `http://www.luckycurve.cn:8090`
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
+
+
+
+
+Vue.prototype.$http =axios
+Vue.config.productionTip = false
 new Vue({
   router,
   render: h => h(App)

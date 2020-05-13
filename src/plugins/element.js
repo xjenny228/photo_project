@@ -12,7 +12,8 @@ MessageBox,
 Tooltip,
 Image,
 Select,
-Option
+Option,
+Tree,
 } from 'element-ui'
 
 Vue.use(Button)
@@ -43,5 +44,6 @@ Vue.use(Tooltip)
 Vue.use(Image)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Tree)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

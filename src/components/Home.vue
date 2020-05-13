@@ -4,8 +4,14 @@
     <el-card>
       <el-row type="flex" justify="end">
         <el-col :span="8">
-          <el-input placeholder="通过此处搜索相片">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input
+            placeholder="通过此处搜索相片"
+            @input="inputchange"
+            v-model="value"
+            clearable
+            @clear="clear"
+          >
+            <el-button slot="append" icon="el-icon-search" @click="getlist"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4" :offset="12">
@@ -64,7 +70,7 @@
       <span class="upspan">修改相册封面</span>
       <el-upload
         class="avatar-uploader"
-        action=""
+        action
         :show-file-list="false"
         :before-upload="beforeAvatarUpload"
       >
@@ -88,6 +94,19 @@
         <el-button type="primary" @click="submitChange()">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- wjh 搜索图片-->
+    <el-dialog :visible.sync="dialogTableVisible">
+      <el-table :data="info ">
+        <el-table-column property="albumId" label="albumid" width="150"></el-table-column>
+        <el-table-column property="id" label="id" width="200"></el-table-column>
+        <el-table-column property="name" label="name"></el-table-column>
+        <el-table-column property="url" label="图片">
+          <template slot-scope="scope">
+            <el-image :src="scope.row.url"></el-image>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -110,7 +129,11 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入相册名", trigger: "blur" }],
         desc: [{ required: true, message: "请输入相册描述", trigger: "blur" }]
-      }
+      },
+      value: "",
+      info: [],
+      dialogFormVisible: false,
+      dialogTableVisible: false
     };
   },
   created() {
@@ -133,7 +156,7 @@ export default {
     clearChange() {
       this.$refs.listFormref.resetFields();
     },
-   ChangeAlum(mes) {
+    ChangeAlum(mes) {
       this.listForm = mes;
       this.changedialogVisible = true;
     },
@@ -212,13 +235,40 @@ export default {
       //更新数据
       this.getAlbum();
     },
+    //搜索
+    async inputchange() {
+      const { data: res } = await this.$http.get("/api/photo/query", {
+        params: { message: this.value }
+      });
+      console.log(res);
+    },
+    //  wjh
+    async getlist() {
+      this.info = [];
+      const { data: res } = await this.$http.get("/api/photo/query", {
+        params: { message: this.value }
+      });
+      this.dialogFormVisible = true;
+
+      console.log(res.data);
+      var i;
+      for (i = 0; i < res.data.length; i++) {
+        // console.log(res.data[i].id);
+        this.info.push(res.data[i]);
+      }
+
+      this.dialogTableVisible = true;
+    },
+    clear() {
+      this.info = [];
+    },
     //携带参数跳转到当前相册
     enterAlum(row, event, column) {
       // 打印当前相册的数据
       this.$router.push({
         path: "/user/album",
         query: {
-          name:row.name,
+          name: row.name,
           id: row.id
         }
       });
@@ -256,7 +306,7 @@ export default {
   margin-bottom: 15px;
   display: inline-block;
 }
-.head_pic{
-  box-shadow: 5px 5px 10px rgba(0,0,0,0.2) ;
+.head_pic {
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 </style>

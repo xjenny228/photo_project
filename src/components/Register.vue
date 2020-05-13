@@ -3,21 +3,21 @@
     <div class="reg_box">
       <i class="el-icon-close" @click="close"></i>
       <div class="title">欢迎注册</div>
-      <el-form label-width="80px" :model="form" :rules="rules" ref="formref">
+      <el-form label-width="80px" :model="form" :rules="rules" ref="registerref">
         <el-form-item label="用户名：" prop="username">
           <el-input placeholder="用于登录的用户名一定要记住哦~~" v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item label="昵称：" prop="nickname">
           <el-input placeholder="取个名字让别人更好认识你吧~~" v-model="form.nickname"></el-input>
         </el-form-item>
-        <el-form-item label="密码：" prop="password">
-          <el-input v-model="form.password"></el-input>
+        <el-form-item label="密码:" prop="password">
+          <el-input v-model="form.password" type="password"></el-input>
         </el-form-item>
         <el-form-item label="邮箱：" prop="email">
           <el-input v-model="form.email"></el-input>
         </el-form-item>
       </el-form>
-      <el-button type="info" @click="reg()">立即注册</el-button>
+      <el-button type="info" @click="submit">立即注册</el-button>
     </div>
   </div>
 </template>
@@ -55,26 +55,38 @@ export default {
       }
     };
   },
-  methods:{
-    close(){
+  methods: {
+    close() {
       this.$router.push("/user/login");
     },
     // 表单预校验
-    reg(){
-      this.$refs.formref.validate(valid=>{
-        if(!valid) return
-      })
+    async submit() {
+      const { data: r } = await this.$http.get("/api/user/check-username", {
+        params: this.username
+      });
+      console.log(r);
+      if (r.code !== 0) return this.$message.error("用户名已存在");
+      this.$refs.registerref.validate(async valid => {
+        if (!valid) return;
+        const { data: res } = await this.$http.get("/api/user/register", {
+          params: this.form
+        });
+        console.log(res);
+        if (res.code !== 0) return this.$message.error("注册失败");
+        this.$message.success("注册成功");
+        this.$router.push("/user/login");
+      });
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.title{
+.title {
   font-size: 30px;
   padding-left: 20px;
 }
 .main_container {
-  background-color:rgb(179, 216, 255);
+  background-color: rgb(179, 216, 255);
   height: 100%;
   position: relative;
 }
@@ -104,7 +116,7 @@ export default {
   bottom: 30px;
   box-sizing: border-box;
 }
-i{
+i {
   margin-top: 10px;
   margin-left: 370px;
 }

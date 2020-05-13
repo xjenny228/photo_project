@@ -93,8 +93,8 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.container,
-.el-container {
+
+.container,.el-container {
   height: 100%;
 }
 .el-header {
