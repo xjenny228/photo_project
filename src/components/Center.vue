@@ -68,10 +68,10 @@ export default {
         this.$refs.editformref.validate(async valid=>{
             if(!valid)return
             
-            const{ data:res}=await this.$http.get('/api/user/info/set',this.editform)
+            const{ data:res}=await this.$http.get('/api/user/info/set',{params:this.editform})
             console.log(res)
-            if(res.code!==0)return console.log('更新失败')
-            console.log('更新成功')
+            if(res.code!==0)return this.$message.Error('更新失败')
+            this.$message.success('更新成功')
             this.editform=res.data
         })
     }

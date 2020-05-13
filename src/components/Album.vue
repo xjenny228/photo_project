@@ -24,10 +24,8 @@ export default {
     return {
       // 上传图片url地址
       uploadurl: "www.luckycurve.cn:8090/api/photo/upload",
-      // 图片上传组件headers对象
-      headerobj: {
-         Authorization:window.sessionStorage.getItem('token')
-      },
+      
+     
     //   相册
     list:[]
     };
@@ -44,11 +42,11 @@ export default {
  async getablumlist(){
     
     
-      const res= await this.$http.get('/api/album/list')
+      //const res= await this.$http.get('/api/album/list')
 
 
 
-     console.log(res)
+     //console.log(res)
   }
   //async getpthotolist(){
     //   const{ data:res}=await this.$http.get('/api/album/list')

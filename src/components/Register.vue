@@ -3,15 +3,15 @@
     <div class="reg_box">
       <i class="el-icon-close" @click="close"></i>
       <h2>欢迎注册</h2>
-      <el-form label-width="80px" :model="form" :rules="rules">
+      <el-form label-width="80px" :model="form" :rules="rules" ref="registerref">
         <el-form-item label="用户名：" prop="username">
           <el-input placeholder="用于登录的用户名一定要记住哦~~" v-model="form.username"></el-input>
         </el-form-item>
         <el-form-item label="昵称：" prop="nickname">
           <el-input placeholder="取个名字让别人更好认识你吧~~" v-model="form.nickname"></el-input>
         </el-form-item>
-        <el-form-item label="密码：" prop="password">
-          <el-input v-model="form.password"></el-input>
+        <el-form-item label="密码:"  prop="password">
+          <el-input v-model="form.password" type="password"></el-input>
         </el-form-item>
         <el-form-item label="邮箱：" prop="email">
           <el-input v-model="form.email"></el-input>
@@ -57,13 +57,26 @@ export default {
   },
   methods:{
     async submit(){
-     const {data:res}=await this.$http.get('/api/user/register',{params:this.form})
+         const {data:r}=await this.$http.get('/api/user/check-username',{params:this.username})
+      console.log(r)
+      if(r.code!==0)return  this.$message.error("用户名已存在");
+     this.$refs.registerref.validate( async valid=>{
+       if(!valid)return 
+    
+    
+    const {data:res}=await this.$http.get('/api/user/register',{params:this.form})
      console.log(res)
      if(res.code!==0)return this.$message.error("注册失败");
      this.$message.success("注册成功");
      this.$router.push('/user/login')
+    })
+   
+    
+    
+
      
-    }
+    },
+    close(){}
   }
 };
 </script>

@@ -4,8 +4,8 @@
     <el-card>
       <el-row type="flex" justify="end">
         <el-col :span="8">
-          <el-input placeholder="通过此处搜索相片" @input="inputchange" v-model="value">
-            <el-button slot="append" icon="el-icon-search" ></el-button>
+          <el-input  placeholder="通过此处搜索相片" @input="inputchange" v-model="value" clearable @clear="clear">
+            <el-button slot="append" icon="el-icon-search" @click="getlist"></el-button>
           </el-input>
         </el-col>
         <el-col :span="4" :offset="8">
@@ -31,18 +31,37 @@
             <span>共有{{list.length}}个相册</span>
           </li>
           <el-checkbox-group v-model="checkList" @change="CheckListChange">
-            <li v-for="(item,index) in list" :key="item" class="list-item" >
+            <li v-for="(item,index) in list" :key="item" class="list-item">
               <el-checkbox :label="item">
                 <i class="el-icon-folder"></i>
               </el-checkbox>
-              <input type="text" v-model="list[index]" value="item" :disabled="isable" ref="index" @contextmenu.prevent="rightClick()"/>
+              <input
+                type="text"
+                v-model="list[index]"
+                value="item"
+                :disabled="isable"
+                ref="index"
+                @contextmenu.prevent="rightClick()"
+              />
             </li>
           </el-checkbox-group>
         </ul>
         <p v-if="loading">加载中...</p>
         <p v-if="noMore">没有更多了</p>
         <!-- 右键菜单 -->
-        
+        <el-dialog  :visible.sync="dialogTableVisible">
+          <el-table :data="info " >
+            <el-table-column property="albumId"  label="albumid" width="150"></el-table-column>
+            <el-table-column property="id" label="id" width="200"></el-table-column>
+            <el-table-column property="name" label="name"></el-table-column>
+            <el-table-column property="url" label="图片">
+            <template  slot-scope="scope">
+              <el-image :src="scope.row.url"></el-image> 
+            </template>
+            </el-table-column>
+          
+          </el-table>
+        </el-dialog>
       </div>
     </div>
   </div>
@@ -61,7 +80,10 @@ export default {
       isIndeterminate: false,
       isable: false,
       menuVisible: false,
-      value:''
+      value: "",
+      info:[],
+      dialogFormVisible:false,
+      dialogTableVisible:false
     };
   },
   methods: {
@@ -98,16 +120,43 @@ export default {
       this.isIndeterminate =
         checkedCount > 0 && checkedCount < this.list.length;
     },
-    rightClick(){
-      console.log(this.$refs)
-      
+    rightClick() {
+      console.log(this.$refs);
     },
     //搜索
-     inputchange(){
-    const res = this.$http.get('/api/photo/query',{params:this.value})
-      console.log(res)
-    }
+     async inputchange() {
+       const { data: res } = await this.$http.get("/api/photo/query", {
+         params:{message:this.value}
+       });
+       console.log(res);
+     },
+    async getlist() {
+      this.info=[]
+      const {data:res} = await this.$http.get("/api/photo/query", {
+        params: {message:this.value}})
+      this.dialogFormVisible=true
+      
+      console.log(res.data);
+      var i;
+      for(i=0;i<res.data.length;i++){
+               // console.log(res.data[i].id);
+                this.info.push(res.data[i])
+     
+        
+        
+     
+       }
+
+    this.dialogTableVisible=true
     
+    },
+    clear(){
+      this.info=[]
+    },
+  async  download(id){
+   const res =await this.$http.post("/api/photo/download"+"?id="+id)
+   console.log(res)
+  }
   },
   computed: {
     noMore() {
