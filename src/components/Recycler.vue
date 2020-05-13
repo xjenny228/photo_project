@@ -4,11 +4,11 @@
     <el-button type="danger" @click="delete1">永久删除</el-button>
     <div style="margin:10px">
      
-       <el-checkbox
+       <!-- <el-checkbox
         :indeterminate="isIndeterminate"
         v-model="checkAll"
         @change="handleCheckAllChange"
-      >全选</el-checkbox>
+      >全选</el-checkbox> -->
       <div style="margin: 15px 0;"></div>
       <el-checkbox-group @change="handleCheckedCitiesChange" v-model="checkList">
         <div v-for="(item,i) in info" :key="item.id" class="photo">
@@ -26,7 +26,7 @@
 export default {
   data() {
     return {
-      userId: "1",
+      
       info: [],
 
       isIndeterminate: true,
@@ -40,14 +40,18 @@ export default {
   },
   methods: {
     async getrecyclerlist() {
+      const {data:r}=await this.$http.get('/api/user/getInfo')
+      console.log(r)
+      let userId=r.data.id
+      console.log(userId)
       const { data: res } = await this.$http.get(
         "/api/photo/listAllPhotosInBin",
         {
-          params: { userId: 1 }
+          params: { userId: userId }
         }
       );
 
-      // console.log(res.data.length);
+       console.log(res);
       let i;
       if (res.data) {
         for (i = 0; i < res.data.length; i++) {
