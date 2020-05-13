@@ -5,7 +5,7 @@
     <div class="login_box">
       <!-- 登录头像 -->
       <div class="login_img">
-        <img src="../assets/logo.png" alt />
+        <i class="el-icon-user-solid"></i>
       </div>
       <!-- 注册 -->
       <div class="register">
@@ -37,18 +37,16 @@ export default {
   data() {
     return {
       form: {
-        username: "",
-        password: ""
+        username: "a3",
+        password: "a"
       },
       //   输入验证规则
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 15, message: "长度在 6 到 15 个字符", trigger: "blur" }
         ]
       }
     };
@@ -63,14 +61,28 @@ export default {
       this.$router.push("/user/register");
     },
     load() {
+      // 表单预校验，验证表单规则
+      this.$refs.formref.validate(async valid=>{
+        if(!valid) return
+        // 检验登录名密码是否存在，发起登录请求
+        const { data: res } = await this.$http.get(
+        "/api/user/login" ,{params:this.form}
+      );
+      console.log(res);
+      if (res.code !== 0) return this.$message.error("登录失败");
+      //将token存入cookie
+      this.$cookies.set('token','value') //把token值存入cookie
+      this.$message.success("登录成功");
       this.$router.push("/user/home");
+      })
+      
     }
   }
 };
 </script>
 <style lang="less" scoped>
 .login_container {
-  background-color: rgb(30, 40, 44);
+  background-color: rgb(179, 216, 255);
   height: 100%;
   position: relative;
 }
@@ -93,11 +105,14 @@ export default {
   transform: translate(-50%, -50%);
   padding: 8px;
 }
-img {
+i {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-color: rgb(193, 193, 193);
+  background-color: rgb(236, 245, 255);
+  font-size:60px;
+  line-height: 80px;
+  text-align: center;
 }
 .login_form {
   position: absolute;

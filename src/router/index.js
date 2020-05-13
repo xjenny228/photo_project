@@ -7,12 +7,10 @@ import Center from '@/components/Center'
 import Album from '@/components/Album'
 import Recycler from '@/components/Recycler'
 import Home from '@/components/Home'
-import axios from 'axios'
-Vue.prototype.$http = axios;
 
 Vue.use(VueRouter)
-
-  const routes = [
+const router = new VueRouter({
+  routes:[
     // 配置路由路径
   {
     path: '/user/login',
@@ -41,12 +39,15 @@ Vue.use(VueRouter)
   {
     path: '/',
     redirect: '/user/login'
-  },
-
+  }
 ]
-
-const router = new VueRouter({
-  routes
 })
-
+//路由拦截器
+router.beforeEach((to,from,next) => {
+  if(to.path==='/user/login') return next()
+  //获取token
+  const tokenStr=window.$cookies.get('token')
+  if(!tokenStr) return next('/user/login')
+  next()
+})
 export default router

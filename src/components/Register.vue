@@ -2,8 +2,8 @@
   <div class="main_container">
     <div class="reg_box">
       <i class="el-icon-close" @click="close"></i>
-      <h2>欢迎注册</h2>
-      <el-form label-width="80px" :model="form" :rules="rules">
+      <div class="title">欢迎注册</div>
+      <el-form label-width="80px" :model="form" :rules="rules" ref="formref">
         <el-form-item label="用户名：" prop="username">
           <el-input placeholder="用于登录的用户名一定要记住哦~~" v-model="form.username"></el-input>
         </el-form-item>
@@ -17,7 +17,7 @@
           <el-input v-model="form.email"></el-input>
         </el-form-item>
       </el-form>
-      <el-button type="info">立即注册</el-button>
+      <el-button type="info" @click="reg()">立即注册</el-button>
     </div>
   </div>
 </template>
@@ -58,20 +58,30 @@ export default {
   methods:{
     close(){
       this.$router.push("/user/login");
+    },
+    // 表单预校验
+    reg(){
+      this.$refs.formref.validate(valid=>{
+        if(!valid) return
+      })
     }
   }
 };
 </script>
 <style lang="less" scoped>
+.title{
+  font-size: 30px;
+  padding-left: 20px;
+}
 .main_container {
-  background-color: rgb(30, 40, 44);
+  background-color:rgb(179, 216, 255);
   height: 100%;
   position: relative;
 }
 .reg_box {
   width: 400px;
   height: 500px;
-  background-color: rgb(255, 255, 255);
+  background-color: #fff;
   position: absolute;
   top: 50%;
   left: 50%;

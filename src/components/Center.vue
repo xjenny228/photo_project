@@ -6,13 +6,13 @@
     </el-breadcrumb>
     <el-form :model="editform" :rules=" editformrules" ref="editformref" label-width="100px">
       <el-form-item label="昵称" prop="nickname">
-        <el-input v-model="editform.nickname"></el-input>
+        <el-input class="input" v-model="editform.nickname"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="editform.email"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="edit ">确定</el-button>
+        <el-button type="primary" @click="edit ">修改</el-button>
         <el-button @click="reseteditform">重置</el-button>
       </el-form-item>
     </el-form>
@@ -61,20 +61,32 @@ export default {
     //点击重置按钮
     reseteditform() {
       console.log(this);
-      this.$refs.editformref.resetFields()
+      this.$refs.editformref.resetFields();
     },
-    edit(){
-        this.$refs.editformref.validate(async valid=>{
-            if(!valid)return
-            
-            //const res=await this.$http.get('/api/user/info/set',this.editform)
-            //console.log(res)
-            //if(res.meta!==200)return console.log('更新成功')
-            //console.log('更新失败')
-        })
+    edit() {
+      this.$refs.editformref.validate(async valid => {
+        if (!valid) return;
+
+        //const res=await this.$http.get('/api/user/info/set',this.editform)
+        //console.log(res)
+        //if(res.meta!==200)return console.log('更新成功')
+        //console.log('更新失败')
+      });
     }
   }
 };
 </script>
 <style lang="less" scoped>
+.el-form {
+  width: 50%;
+  border: 0px;
+}
+.input {
+  border: 0px;
+  outline: none;
+}
+.el-input_inner {
+  border: 0px;
+  border-radius: 0px;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <!-- 搜索，新建相册，删除相册部分 -->
+    <!-- 搜索，新建相册部分 -->
     <el-card>
       <el-row type="flex" justify="end">
         <el-col :span="8">
@@ -8,143 +8,255 @@
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-col>
-        <el-col :span="4" :offset="8">
-          <el-button type="primary" @click="bulid">新建相册</el-button>
-        </el-col>
-        <el-col :span="4">
-          <el-button type="info" @click="del">删除相册</el-button>
+        <el-col :span="4" :offset="12">
+          <el-button type="primary" @click="dialogVisible = true">新建相册</el-button>
         </el-col>
       </el-row>
     </el-card>
     <!-- 新建相册和删除相册部分 -->
     <div class="main">
-      <!-- 无限滚动 -->
-      <div class="infinite-list-wrapper" style="overflow:auto">
-        <ul v-infinite-scroll="load" infinite-scroll-disabled="disabled">
-          <!-- 实现相册全选和统计 -->
-          <li class="head">
-            <el-checkbox
-              v-model="checkAll"
-              @change="CheckAllChange"
-              :indeterminate="isIndeterminate"
-            >全部相册</el-checkbox>
-            <span>共有{{list.length}}个相册</span>
-          </li>
-          <el-checkbox-group v-model="checkList" @change="CheckListChange">
-            <li v-for="(item,index) in list" :key="item" class="list-item" >
-              <el-checkbox :label="item">
-                <i class="el-icon-folder"></i>
-              </el-checkbox>
-              <input type="text" v-model="list[index]" value="item" :disabled="isable" ref="index" @contextmenu.prevent="rightClick()"/>
-            </li>
-          </el-checkbox-group>
-        </ul>
-        <p v-if="loading">加载中...</p>
-        <p v-if="noMore">没有更多了</p>
-        <!-- 右键菜单 -->
-        
-      </div>
+      <el-table :data="list" style="width: 100%" max-height="400px" @cell-dblclick="enterAlum">
+        <el-table-column type="index" label="#"></el-table-column>
+        <el-table-column label="封面" width="180">
+          <template slot-scope="scope">
+            <img :src="scope.row.cover" width="70" height="70" class="head_pic" />
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="相册名" width="180"></el-table-column>
+        <el-table-column prop="desc" label="相册描述" width="180"></el-table-column>
+        <el-table-column label="操作" width="180">
+          <template slot-scope="scope">
+            <el-button type="primary" icon="el-icon-edit" circle @click="ChangeAlum(scope.row)"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle @click="deleteAlum(scope.row.id)"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
+    <!-- 新建相册的对话框 -->
+    <el-dialog title="新建相册" :visible.sync="dialogVisible" width="50%" @close="clearform()">
+      <!-- 对话框主体区域 -->
+      <span>
+        <!-- 添加相册名和相册描述 -->
+        <el-form
+          :model="alumForm"
+          :rules="rules"
+          ref="alumFormref"
+          label-width="100px"
+          class="addalum"
+        >
+          <el-form-item label="相册名" prop="name">
+            <el-input type="text" v-model="alumForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="相册描述" prop="desc">
+            <el-input type="text" v-model="alumForm.desc"></el-input>
+          </el-form-item>
+        </el-form>
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitAdd()">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 修改相册的对话框 -->
+    <el-dialog title="修改相册" :visible.sync="changedialogVisible" width="50%" @close="clearChange()">
+      <!-- 主体部分 -->
+      <!-- 修改相册封面 -->
+      <span class="upspan">修改相册封面</span>
+      <el-upload
+        class="avatar-uploader"
+        action=""
+        :show-file-list="false"
+        :before-upload="beforeAvatarUpload"
+      >
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        <div class="el-upload__tip" slot="tip">只能上传jpg/png/gif文件，且不超过2M</div>
+      </el-upload>
+
+      <!-- 修改相册名和描述 -->
+      <el-form :model="listForm" label-width="100px" :rules="changerules" ref="listFormref">
+        <el-form-item label="相册名" prop="name">
+          <el-input type="text" v-model="listForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="相册描述" prop="desc">
+          <el-input type="text" v-model="listForm.desc"></el-input>
+        </el-form-item>
+      </el-form>
+      <!--对话框底部 选择按钮 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="changedialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitChange()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      count: 2,
-      loading: false,
-      new: 0,
-      checkAll: false,
-      list: ["默认相册1", "默认相册2"],
-      checkList: [],
-      checkAll: false,
-      isIndeterminate: false,
-      isable: false,
-      menuVisible: false
+      list: [],
+      dialogVisible: false,
+      changedialogVisible: false,
+      imageUrl: "",
+      alumForm: {
+        name: "",
+        desc: ""
+      },
+      listForm: {},
+      changerules: {
+        name: [{ required: true, message: "请输入相册名", trigger: "blur" }],
+        desc: [{ required: true, message: "请输入相册描述", trigger: "blur" }]
+      },
+      rules: {
+        name: [{ required: true, message: "请输入相册名", trigger: "blur" }],
+        desc: [{ required: true, message: "请输入相册描述", trigger: "blur" }]
+      }
     };
   },
-  methods: {
-    load() {
-      this.loading = true;
-      setTimeout(() => {
-        this.count += 2;
-        this.loading = false;
-      }, 2000);
-    },
-    bulid() {
-      this.new++; //新建相册的个数
-      this.count++; //总的相册个数
-      this.list.push("新建相册" + this.new); //向数组添加相册名称
-    },
-    del() {
-      let i, j;
-      if (this.checkList.length == this.list.length) {
-        this.list.splice(0);
-      }
-      for (i = 0; i < this.list.length; i++) {
-        for (j = 0; j < this.checkList.length; j++) {
-          if (this.list[i] === this.checkList[j]) this.list.splice(i, 1);
-        }
-      }
-    },
-    CheckAllChange(val) {
-      this.checkList = val ? this.list : [];
-      this.isIndeterminate = false;
-    },
-    CheckListChange(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.list.length;
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.list.length;
-    },
-    rightClick(){
-      console.log(this.$refs)
-      
-    }
-    
+  created() {
+    this.getAlbum();
   },
-  computed: {
-    noMore() {
-      return this.count > 20; //文件数目大于this.count停止加载
+  methods: {
+    // 获取相册列表
+    async getAlbum() {
+      const { data: res } = await this.$http.get("/api/album/list");
+      if (res.code !== 0) {
+        return this.$message.error("获取相册列表失败！");
+      }
+      this.list = res.data;
     },
-    disabled() {
-      return this.loading || this.noMore;
+    // 对话框退出后清空上次表单输入内容
+    clearform() {
+      this.$refs.alumFormref.resetFields();
+    },
+    // 还原本来的数据
+    clearChange() {
+      this.$refs.listFormref.resetFields();
+    },
+   ChangeAlum(mes) {
+      this.listForm = mes;
+      this.changedialogVisible = true;
+    },
+    submitAdd() {
+      // 表单验证
+      this.$refs.alumFormref.validate(async valid => {
+        if (!valid) return;
+        const { data: res } = await this.$http.get("/api/album/create", {
+          params: this.alumForm
+        });
+        if (res.code !== 0) return this.$message.error("添加用户信息失败");
+        this.$message.success("添加用户信息成功");
+        this.dialogVisible = false;
+        // 更新数据
+        this.getAlbum();
+      });
+    },
+    submitChange() {
+      // 表单验证
+      this.$refs.listFormref.validate(async valid => {
+        if (!valid) return;
+        //发送修改请求
+        const { data: res } = await this.$http.get("/api/album/set", {
+          params: this.listForm
+        });
+        if (res.code !== 0) {
+          return this.$message.error("修改用户信息失败");
+        }
+        this.changedialogVisible = false;
+        // 更新数据
+        this.getAlbum();
+        this.$message.success("修改用户信息成功");
+      });
+    },
+    // 上传头像
+
+    beforeAvatarUpload(file) {
+      let fd = new FormData();
+      fd.append("id", this.listForm.id); //传参数
+      fd.append("cover", file);
+      this.$http.post("/api/album/setCover", fd);
+      const isJPG = file.type === "image/jpeg";
+      const isPNG = file.type === "image/png";
+      const isGIF = file.type === "image/gif";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      this.imageUrl = URL.createObjectURL(file);
+      if (!isJPG && !isPNG && !isGIF) {
+        this.$message.error("上传相册封面图片必须是 JPG/PNG/GIF格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传相册封面图片大小不能超过 2MB!");
+      }
+      return isJPG && isPNG && isGIF && isLt2M;
+    },
+    async deleteAlum(alumid) {
+      const res = await this.$confirm(
+        "此操作将永久删除该相册, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }
+      ).catch(err => {
+        return err;
+      });
+      if (res !== "confirm") {
+        return this.$message.info("已取消删除操作");
+      }
+      //删除操作
+      const { data: response } = await this.$http.get(
+        "/api/album/delete?id=" + alumid
+      );
+      if (response.code !== 0) return this.$message.error("删除失败");
+      this.$message.success("删除成功");
+      //更新数据
+      this.getAlbum();
+    },
+    //携带参数跳转到当前相册
+    enterAlum(row, event, column) {
+      // 打印当前相册的数据
+      this.$router.push({
+        path: "/user/album",
+        query: {
+          name:row.name,
+          id: row.id
+        }
+      });
     }
   }
 };
 </script>
 <style lang="less" scoped>
-li {
-  width: 100%;
-  height: 40px;
-  border-bottom: 1px solid rgb(220, 232, 244);
-  list-style: none;
-}
-p {
-  height: 100px;
-}
 .main {
-  line-height: 40px;
+  margin-top: 20px;
 }
-.head span {
-  float: right;
+.avatar-uploader-icon:hover {
+  border-color: #409eff;
 }
-.menu__item {
-  display: block;
-  line-height: 20px;
-  text-align: center;
-  margin-top: 10px;
-}
-.menu {
-  height: 100px;
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
   width: 100px;
-  position: absolute;
-  border-radius: 10px;
-  border: 1px solid #999999;
-  background-color: #f4f4f4;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
 }
-.menu li:hover {
-  background-color: #1790ff;
-  color: white;
+.avatar {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+}
+.upspan {
+  padding-right: 12px;
+}
+.avatar-uploader {
+  margin-bottom: 15px;
+  display: inline-block;
+}
+.head_pic{
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.2) ;
 }
 </style>
