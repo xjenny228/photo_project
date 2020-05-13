@@ -3,18 +3,17 @@
     <el-button type="primary" @click="huanyuan" style="margin: 0 30px;">还原</el-button>
     <el-button type="danger" @click="delete1">永久删除</el-button>
     <div style="margin:10px">
-     
-       <!-- <el-checkbox
+      <!-- <el-checkbox
         :indeterminate="isIndeterminate"
         v-model="checkAll"
         @change="handleCheckAllChange"
-      >全选</el-checkbox> -->
+      >全选</el-checkbox>-->
       <div style="margin: 15px 0;"></div>
       <el-checkbox-group @change="handleCheckedCitiesChange" v-model="checkList">
         <div v-for="(item,i) in info" :key="item.id" class="photo">
           <!--    -->
           <el-checkbox :label="item.name" @change="click(i)" style="display:block;"></el-checkbox>
-       
+
           <el-image :src="item.url" style=" {margin:5px; width:300px;height:300px;"></el-image>
         </div>
       </el-checkbox-group>
@@ -40,6 +39,7 @@ export default {
   },
   methods: {
     async getrecyclerlist() {
+   
       const {data:r}=await this.$http.get('/api/user/getInfo')
       console.log(r)
       let userId=r.data.id
@@ -49,16 +49,15 @@ export default {
         {
           params: { userId: userId }
         }
-      );
-
+      )
        console.log(res);
-      let i;
-      if (res.data) {
-        for (i = 0; i < res.data.length; i++) {
+     let i;
+        for (i = 0; i < res.data.length; i++)
+         {
           this.info.push(res.data[i]);
-          this.info[i].xuan = "unchecked";
-        }
-      }
+          this.info[i].xuan = "unchecked";    
+          }
+      
       console.log(this.info);
       //    res.data.forEach(item => {
       //      this.info.push(item);
@@ -79,8 +78,7 @@ export default {
   async  delete1() {
       let id = [];
     let j=[];
-      let count = 0,
-        i;
+      let count = 0,i;
       for (i = 0; i < this.info.length; i++) {
         if (this.info[i].xuan == "checked") {
           count++;

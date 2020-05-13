@@ -49,6 +49,7 @@
         <p v-if="loading">加载中...</p>
         <p v-if="noMore">没有更多了</p>
         <!-- 右键菜单 -->
+        <!-- wjh -->
         <el-dialog  :visible.sync="dialogTableVisible">
           <el-table :data="info " >
             <el-table-column property="albumId"  label="albumid" width="150"></el-table-column>
@@ -130,6 +131,7 @@ export default {
        });
        console.log(res);
      },
+    //  wjh
     async getlist() {
       this.info=[]
       const {data:res} = await this.$http.get("/api/photo/query", {

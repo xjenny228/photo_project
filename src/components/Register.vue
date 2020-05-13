@@ -62,20 +62,14 @@ export default {
       if(r.code!==0)return  this.$message.error("用户名已存在");
      this.$refs.registerref.validate( async valid=>{
        if(!valid)return 
-    
-    
-    const {data:res}=await this.$http.get('/api/user/register',{params:this.form})
-     console.log(res)
-     if(res.code!==0)return this.$message.error("注册失败");
-     this.$message.success("注册成功");
-     this.$router.push('/user/login')
+     const {data:res}=await this.$http.get('/api/user/register',{params:this.form})
+      console.log(res)
+      if(res.code!==0)return this.$message.error("注册失败");
+      this.$message.success("注册成功");
+      this.$router.push('/user/login')
     })
    
-    
-    
-
-     
-    },
+   },
     close(){}
   }
 };
