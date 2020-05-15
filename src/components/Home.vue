@@ -101,7 +101,7 @@
         <el-table-column property="name" label="name"></el-table-column>
         <el-table-column property="url" label="图片">
           <template slot-scope="scope">
-            <el-image :src="scope.row.url"></el-image>
+            <el-image :src="scope.row.url" @click="enterphoto(scope.row)"></el-image>
           </template>
         </el-table-column>
       </el-table>
@@ -261,6 +261,26 @@ export default {
     clear() {
       this.info = [];
     },
+    enterphoto(row){
+      let i;
+      let name;
+      for(i=0;i<this.listForm.length;i++){
+        if(this.listForm[i].id===row.albumId){
+          name=listForm[i].name
+        }
+      }
+      console.log(row.id)
+      console.log(row.albumId)
+
+       this.$router.push({
+        path: "/user/album",
+        query: {
+          name: name,
+          id: row.albumId,
+          photoid:row.id
+        }
+      });
+    },
     //携带参数跳转到当前相册
     enterAlum(row, event, column) {
       // 打印当前相册的数据
@@ -268,7 +288,8 @@ export default {
         path: "/user/album",
         query: {
           name: row.name,
-          id: row.id
+          id: row.id,
+          photoid:row.id
         }
       });
     }

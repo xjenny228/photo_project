@@ -29,7 +29,7 @@
             <br />
             所属相册：{{albumname}}
           </div>
-          <el-image
+          <el-image :class="{ color:item.color}  "
             style="width: 100px; height: 100px"
             :src="item.url"
             :preview-src-list="srcList"
@@ -79,6 +79,7 @@
 export default {
   data() {
     return {
+      photoid:'',
       id: "",
       albumname: "",
       photolist: [],
@@ -93,8 +94,10 @@ export default {
         name: " ",
         albumId: " ",
         id: " ",
-        url: ""
+        url: "",
+        color :'false'
       },
+
       changerules: {
         name: [{ required: true, message: "请输入图片名", trigger: "blur" }]
       }
@@ -105,12 +108,17 @@ export default {
     // 接收传递过来的参数
     this.id = this.$route.query.id;
     this.albumname = this.$route.query.name;
+    this.photoid=this.$route.query.photoid;
+ 
     //获取当前页面图片
     this.getPhoto();
     //获取当前用户信息
     this.getUserid();
     //获取当前用户所有相册
     this.getAlbum();
+  
+   
+  
   },
   methods: {
     async getPhoto() {
@@ -125,6 +133,19 @@ export default {
         this.srcList[i] = res.data[i].url;
       }
       console.log(this.photolist);
+       
+   let i;
+ 
+   for(i=0;i<this.photolist.length;i++){
+      console.log( this.photolist[i].id)
+     if(this.photolist[i].id===this.photoid){
+      
+      this.photolist[i].color = true;
+
+      console.log( this.photolist[i].color)
+     }
+
+   }
     },
     async getUserid() {
       const { data: res } = await this.$http.get("/api/user/getInfo");
@@ -220,5 +241,8 @@ export default {
 }
 .uploadeform {
   display: inline-block;
+}
+.color{
+  outline:  10px solid red;  
 }
 </style>
