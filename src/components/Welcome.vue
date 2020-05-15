@@ -31,7 +31,7 @@
           >
             <el-menu-item index="/user/home">
               <i class="el-icon-menu"></i>
-              <span slot="title">首页</span>
+              <span slot="title">相册集</span>
             </el-menu-item>
             <el-menu-item index="/user/center">
               <i class="el-icon-user"></i>
@@ -39,7 +39,7 @@
             </el-menu-item>
             <el-menu-item index="/user/album" disabled>
               <i class="el-icon-picture-outline"></i>
-              <span slot="title">相册</span>
+              <span slot="title">照片</span>
             </el-menu-item>
             <el-menu-item index="/user/recycler">
               <i class="el-icon-delete"></i>

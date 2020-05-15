@@ -11,6 +11,12 @@
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="editform.email"></el-input>
       </el-form-item>
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="editform.username" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="头像" prop="avatar">
+       <el-image :src="editform.avatar"></el-image>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="edit ">修改</el-button>
         <el-button @click="reseteditform">重置</el-button>
@@ -34,7 +40,9 @@ export default {
       //   查询到的用户信息对象
       editform: {
         nickname: "",
-        email: ""
+        email: "",
+        username:'',
+        avatar:''
       },
 
       //   修改用户信息验证规则
@@ -55,9 +63,10 @@ export default {
   },
   methods: {
     async geteditform() {
-        const {data:res} = await this.$http.get('/api/user/info/set')
-       console.log(res);
+        const {data:res} = await this.$http.get('/api/user/info/get')
+       console.log(res.data);
        this.editform=res.data
+       console.log(this.editform.avatar)
     },
     //点击重置按钮
     reseteditform() {
@@ -73,6 +82,7 @@ export default {
             if(res.code!==0)return this.$message.Error('更新失败')
             this.$message.success('更新成功')
             this.editform=res.data
+            console.log(this.editform)
         })
     }
   }

@@ -14,7 +14,7 @@
           <!--    -->
           <el-checkbox :label="item.name" @change="click(i)" style="display:block;"></el-checkbox>
 
-          <el-image :src="item.url" style=" {margin:5px; width:300px;height:300px;"></el-image>
+          <el-image :src="item.url" style=" {margin:5px; width:100px;height:100px;"></el-image>
         </div>
       </el-checkbox-group>
     </div>
@@ -143,7 +143,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .photo {
-  width: 350px;
+  width: 150px;
   float: left;
   position: relative;
   margin: 10px;

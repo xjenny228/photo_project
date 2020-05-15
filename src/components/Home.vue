@@ -97,8 +97,7 @@
     <!-- wjh 搜索图片-->
     <el-dialog :visible.sync="dialogTableVisible">
       <el-table :data="info ">
-        <el-table-column property="albumId" label="albumid" width="150"></el-table-column>
-        <el-table-column property="id" label="id" width="200"></el-table-column>
+      
         <el-table-column property="name" label="name"></el-table-column>
         <el-table-column property="url" label="图片">
           <template slot-scope="scope">
