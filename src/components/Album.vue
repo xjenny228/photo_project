@@ -243,6 +243,9 @@ export default {
   display: inline-block;
 }
 .color{
-  outline:  10px solid red;  
+  outline:  5px solid #409eff;
 }
+
+
+
 </style>
