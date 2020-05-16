@@ -14,8 +14,8 @@
       <el-form-item label="用户名" prop="username">
         <el-input v-model="editform.username" disabled></el-input>
       </el-form-item>
-      <el-form-item label="头像" prop="avatar">
-       <el-image :src="editform.avatar"></el-image>
+      <el-form-item label="相册数" prop="avatar">
+        <el-input v-model="editform.albumCount" disabled></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="edit ">修改</el-button>
@@ -42,7 +42,7 @@ export default {
         nickname: "",
         email: "",
         username:'',
-        avatar:''
+        albumCount:''
       },
 
       //   修改用户信息验证规则
