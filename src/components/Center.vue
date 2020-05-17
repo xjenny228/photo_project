@@ -64,9 +64,9 @@ export default {
   methods: {
     async geteditform() {
         const {data:res} = await this.$http.get('/api/user/info/get')
-       console.log(res.data);
+       //console.log(res.data);
        this.editform=res.data
-       console.log(this.editform.avatar)
+       //console.log(this.editform.avatar)
     },
     //点击重置按钮
     reseteditform() {
@@ -82,7 +82,7 @@ export default {
             if(res.code!==0)return this.$message.Error('更新失败')
             this.$message.success('更新成功')
             this.editform=res.data
-            console.log(this.editform)
+            //console.log(this.editform)
         })
     }
   }

@@ -44,7 +44,8 @@ const router = new VueRouter({
 })
 //路由拦截器
 router.beforeEach((to,from,next) => {
-  if(to.path==='/user/login') return next()
+  if(to.path==='/user/login' ) return next()
+  if(to.path==='/user/register' ) return next()
   //获取token
   const tokenStr=window.$cookies.get('token')
   if(!tokenStr) return next('/user/login')

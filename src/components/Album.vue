@@ -29,7 +29,8 @@
             <br />
             所属相册：{{albumname}}
           </div>
-          <el-image :class="{ color:item.color}  "
+          
+          <el-image :class="{ shadow:item.shadow}  "
             style="width: 100px; height: 100px"
             :src="item.url"
             :preview-src-list="srcList"
@@ -95,7 +96,7 @@ export default {
         albumId: " ",
         id: " ",
         url: "",
-        color :'false'
+        shadow :'false'
       },
 
       changerules: {
@@ -140,9 +141,9 @@ export default {
       console.log( this.photolist[i].id)
      if(this.photolist[i].id===this.photoid){
       
-      this.photolist[i].color = true;
+      this.photolist[i].shadow = true;
 
-      console.log( this.photolist[i].color)
+      //console.log( this.photolist[i].shadow)
      }
 
    }
@@ -242,7 +243,7 @@ export default {
 .uploadeform {
   display: inline-block;
 }
-.color{
-  outline:  10px solid red;  
+.shadow{
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4); 
 }
 </style>

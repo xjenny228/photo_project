@@ -20,7 +20,7 @@
           </el-form-item>
           <!-- 密码输入框 -->
           <el-form-item prop="password">
-            <el-input placeholder="请输入密码" prefix-icon="el-icon-lock" v-model="form.password"></el-input>
+            <el-input  type="password" placeholder="请输入密码" prefix-icon="el-icon-lock" v-model="form.password"></el-input>
           </el-form-item>
         </el-form>
         <!-- 按钮 -->
@@ -37,8 +37,9 @@ export default {
   data() {
     return {
       form: {
-        username: "a3",
-        password: "a"
+        //用户名a3,密码a 测试
+        username: "",
+        password: ""
       },
       //   输入验证规则
       rules: {

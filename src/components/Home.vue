@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <!-- 搜索，新建相册部分 -->
+    <!-- 搜索，相册部分 -->
     <el-card>
       <el-row type="flex" justify="end">
         <el-col :span="8">
@@ -19,7 +19,7 @@
         </el-col>
       </el-row>
     </el-card>
-    <!-- 新建相册和删除相册部分 -->
+    <!-- 相册主体部分 -->
     <div class="main">
       <el-table :data="list" style="width: 100%" max-height="400px" @cell-dblclick="enterAlum">
         <el-table-column type="index" label="#"></el-table-column>
@@ -73,6 +73,7 @@
         action
         :show-file-list="false"
         :before-upload="beforeAvatarUpload"
+        ref='upload'
       >
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -121,6 +122,7 @@ export default {
         desc: ""
       },
       listForm: {},
+      nameisRepeat: false,
       changerules: {
         name: [{ required: true, message: "请输入相册名", trigger: "blur" }],
         desc: [{ required: true, message: "请输入相册描述", trigger: "blur" }]
@@ -132,7 +134,7 @@ export default {
       value: "",
       info: [],
       dialogFormVisible: false,
-      dialogTableVisible: false
+      dialogTableVisible: false,
     };
   },
   created() {
@@ -154,9 +156,11 @@ export default {
     // 还原本来的数据
     clearChange() {
       this.$refs.listFormref.resetFields();
+      this.$refs.upload.clearFiles();
     },
     ChangeAlum(mes) {
       this.listForm = mes;
+      this.imageUrl= mes.cover
       this.changedialogVisible = true;
     },
     submitAdd() {
@@ -166,8 +170,8 @@ export default {
         const { data: res } = await this.$http.get("/api/album/create", {
           params: this.alumForm
         });
-        if (res.code !== 0) return this.$message.error("添加用户信息失败");
-        this.$message.success("添加用户信息成功");
+        if (res.code !== 0) return this.$message.error("新建相册失败");
+        this.$message.success("新建相册成功");
         this.dialogVisible = false;
         // 更新数据
         this.getAlbum();
@@ -187,7 +191,7 @@ export default {
         this.changedialogVisible = false;
         // 更新数据
         this.getAlbum();
-        this.$message.success("修改用户信息成功");
+        this.$message.success("修改用户信息成功"); 
       });
     },
     // 上传头像
@@ -234,6 +238,7 @@ export default {
       //更新数据
       this.getAlbum();
     },
+    
     //搜索
     async inputchange() {
       const { data: res } = await this.$http.get("/api/photo/query", {
@@ -269,10 +274,10 @@ export default {
           name=listForm[i].name
         }
       }
-      console.log(row.id)
-      console.log(row.albumId)
+      //console.log(row.id)
+      //console.log(row.albumId)
 
-       this.$router.push({
+      this.$router.push({
         path: "/user/album",
         query: {
           name: name,
